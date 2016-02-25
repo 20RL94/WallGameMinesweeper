@@ -12,7 +12,6 @@ public class Block extends Button
 {
     private boolean isCovered; // is block covered yet
     private boolean isMined; // does the block has a mine underneath
-    private boolean isQuestionMarked; // is block question marked
     private boolean isClickable; // can block accept click events
     private int numberOfMinesInSurrounding; // number of mines in nearby blocks
 
@@ -36,7 +35,6 @@ public class Block extends Button
     {
         isCovered = true;
         isMined = false;
-        isQuestionMarked = false;
         isClickable = true;
         numberOfMinesInSurrounding = 0;
 
@@ -200,19 +198,6 @@ public class Block extends Button
         return numberOfMinesInSurrounding;
     }
 
-
-
-    // is block marked as a question mark
-    public boolean isQuestionMarked()
-    {
-        return isQuestionMarked;
-    }
-
-    // set question mark for the block
-    public void setQuestionMarked(boolean questionMarked)
-    {
-        isQuestionMarked = questionMarked;
-    }
 
     // can block receive click event
     public boolean isClickable()

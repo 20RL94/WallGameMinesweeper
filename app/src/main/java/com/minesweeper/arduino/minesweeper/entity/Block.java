@@ -200,8 +200,6 @@ public class Block extends Button
         return numberOfMinesInSurrounding;
     }
 
-
-
     // is block marked as a question mark
     public boolean isQuestionMarked()
     {

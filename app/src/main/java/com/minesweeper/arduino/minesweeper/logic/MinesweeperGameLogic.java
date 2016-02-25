@@ -127,7 +127,6 @@ public class MinesweeperGameLogic {
                         {
                             // Oops, game over
                             //TODO send a signal to put all LED to RED
-
                             finishGame(minesweeperGame, minesweeperGame.blocks, minesweeperGame.btnSmile, minesweeperGame.numberOfColumnsInMineField, minesweeperGame.numberOfRowsInMineField, minesweeperGame.secondsPassed, currentRow, currentColumn);
                         }
 
@@ -221,6 +220,8 @@ public class MinesweeperGameLogic {
             {
                 // disable block
                 blocks[row][column].setBlockAsDisabled(false);
+                //TODO send signal TURN OFF led
+                ArduinoConnection.sendCommand(row, column, 0);
 
                 // block has mine
                 if (blocks[row][column].hasMine() )
@@ -228,8 +229,8 @@ public class MinesweeperGameLogic {
                     // set mine icon
                     blocks[row][column].setMineIcon(false);
                     //TODO send signal RED Led
+                    ArduinoConnection.sendCommand(row, column, MinesweeperGame.RED);
                 }
-
 
             }
         }
@@ -264,7 +265,6 @@ public class MinesweeperGameLogic {
         minesweeperGame.updateMineCountDisplay(); // update mine count
 
         // disable all buttons
-        // set flagged all un-flagged blocks
         for (int row = 1; row < numberOfRowsInMineField + 1; row++)
         {
             for (int column = 1; column < numberOfColumnsInMineField + 1; column++)
@@ -276,12 +276,8 @@ public class MinesweeperGameLogic {
                 }
             }
         }
-
         // show message
         minesweeperGame.showDialog("You won in " + Integer.toString(secondsPassed) + " seconds!", 1000, false, true);
     }
-
-
-
 
 }

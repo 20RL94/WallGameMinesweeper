@@ -37,9 +37,9 @@ public class MinesweeperGame extends Activity
     public int blockPadding = 2; // padding between blocks
 
     //LED Colors, arduino code: setColor(red,green,blue)
-    private final int RED = 1; //arduino code: setColor(255,0,0)
-    private final int BLUE = 2; //arduino code: setColor(0,0,255)
-    private final int GREEN = 3; //arduino code: setColor(0,255,0)
+    public final int RED = 1; //arduino code: setColor(255,0,0)
+    public final int BLUE = 2; //arduino code: setColor(0,0,255)
+    public final int GREEN = 3; //arduino code: setColor(0,255,0)
 
 
     // Don't touch the default values!

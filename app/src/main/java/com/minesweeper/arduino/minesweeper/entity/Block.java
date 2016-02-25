@@ -12,7 +12,6 @@ public class Block extends Button
 {
     private boolean isCovered; // is block covered yet
     private boolean isMined; // does the block has a mine underneath
-    private boolean isFlagged; // is block flagged as a potential mine
     private boolean isQuestionMarked; // is block question marked
     private boolean isClickable; // can block accept click events
     private int numberOfMinesInSurrounding; // number of mines in nearby blocks
@@ -37,7 +36,6 @@ public class Block extends Button
     {
         isCovered = true;
         isMined = false;
-        isFlagged = false;
         isQuestionMarked = false;
         isClickable = true;
         numberOfMinesInSurrounding = 0;
@@ -72,39 +70,7 @@ public class Block extends Button
         }
     }
 
-    // set mine as flagged
-    // set block as disabled/opened if false is passed
-    public void setFlagIcon(boolean enabled)
-    {
-        this.setText("F");
 
-        if (!enabled)
-        {
-            this.setBackgroundResource(R.drawable.square_pink);
-            this.setTextColor(Color.RED);
-        }
-        else
-        {
-            this.setTextColor(Color.BLACK);
-        }
-    }
-
-    // set mine as question mark
-    // set block as disabled/opened if false is passed
-    public void setQuestionMarkIcon(boolean enabled)
-    {
-        this.setText("?");
-
-        if (!enabled)
-        {
-            this.setBackgroundResource(R.drawable.square_pink);
-            this.setTextColor(Color.RED);
-        }
-        else
-        {
-            this.setTextColor(Color.BLACK);
-        }
-    }
 
     // set block as disabled/opened if false is passed
     // else enable/close it
@@ -234,17 +200,7 @@ public class Block extends Button
         return numberOfMinesInSurrounding;
     }
 
-    // is block marked as flagged
-    public boolean isFlagged()
-    {
-        return isFlagged;
-    }
 
-    // mark block as flagged
-    public void setFlagged(boolean flagged)
-    {
-        isFlagged = flagged;
-    }
 
     // is block marked as a question mark
     public boolean isQuestionMarked()

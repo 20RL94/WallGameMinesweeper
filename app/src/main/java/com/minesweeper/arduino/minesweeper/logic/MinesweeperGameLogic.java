@@ -50,8 +50,6 @@ public class MinesweeperGameLogic {
      */
     public static void showMineField(MinesweeperGame minesweeperGame, int blockDimension, int blockPadding, Block[][] blocks, int height, TableLayout mineField, int numberOfColumnsInMineField, int numberOfRowsInMineField, int width)
     {
-        //TODO send a signal to arduino to set all LED to default color
-
         // 0th and last Row and Columns
         // are used for calculation purposes only
         for (int row = 1; row < numberOfRowsInMineField + 1; row++)
@@ -121,27 +119,25 @@ public class MinesweeperGameLogic {
                             minesweeperGame.setMines(currentRow, currentColumn);
                         }
 
+                        // open nearby blocks till we get numbered blocks
+                        minesweeperGame.rippleUncover(currentRow, currentColumn);
 
-                        if (!minesweeperGame.blocks[currentRow][currentColumn].isFlagged())
+                        // did we clicked a mine
+                        if (minesweeperGame.blocks[currentRow][currentColumn].hasMine())
                         {
-                            // open nearby blocks till we get numbered blocks
-                            minesweeperGame.rippleUncover(currentRow, currentColumn);
+                            // Oops, game over
+                            //TODO send a signal to put all LED to RED
 
-                            // did we clicked a mine
-                            if (minesweeperGame.blocks[currentRow][currentColumn].hasMine())
-                            {
-                                // Oops, game over
-                                //TODO send a signal to put all LED to RED
-                                finishGame(minesweeperGame, minesweeperGame.blocks, minesweeperGame.btnSmile, minesweeperGame.numberOfColumnsInMineField, minesweeperGame.numberOfRowsInMineField, minesweeperGame.secondsPassed, currentRow, currentColumn);
-                            }
-
-                            // check if we win the game
-                            if (checkGameWin(minesweeperGame.blocks, minesweeperGame.numberOfColumnsInMineField, minesweeperGame.numberOfRowsInMineField))
-                            {
-                                // mark game as win
-                                winGame(minesweeperGame, minesweeperGame.blocks, minesweeperGame.btnSmile, minesweeperGame.numberOfColumnsInMineField, minesweeperGame.numberOfRowsInMineField, minesweeperGame.secondsPassed);
-                            }
+                            finishGame(minesweeperGame, minesweeperGame.blocks, minesweeperGame.btnSmile, minesweeperGame.numberOfColumnsInMineField, minesweeperGame.numberOfRowsInMineField, minesweeperGame.secondsPassed, currentRow, currentColumn);
                         }
+
+                        // check if we win the game
+                        if (checkGameWin(minesweeperGame.blocks, minesweeperGame.numberOfColumnsInMineField, minesweeperGame.numberOfRowsInMineField))
+                        {
+                            // mark game as win
+                            winGame(minesweeperGame, minesweeperGame.blocks, minesweeperGame.btnSmile, minesweeperGame.numberOfColumnsInMineField, minesweeperGame.numberOfRowsInMineField, minesweeperGame.secondsPassed);
+                        }
+
                     }
                 });
             }
@@ -171,7 +167,7 @@ public class MinesweeperGameLogic {
         minesweeperGame.areMinesSet=false;
         minesweeperGame.isGameOver=false;
         minesweeperGame.minesToFind=0;
-        //TODO send a signal to arduino to reset the LED-WALL. set all LED to RED
+
 
     }
 
@@ -226,29 +222,15 @@ public class MinesweeperGameLogic {
                 // disable block
                 blocks[row][column].setBlockAsDisabled(false);
 
-                // block has mine and is not flagged
-                if (blocks[row][column].hasMine() && !blocks[row][column].isFlagged())
+                // block has mine
+                if (blocks[row][column].hasMine() )
                 {
                     // set mine icon
                     blocks[row][column].setMineIcon(false);
                     //TODO send signal RED Led
                 }
 
-                // block is flagged and doesn't not have mine
-                if (!blocks[row][column].hasMine() && blocks[row][column].isFlagged())
-                {
-                    // set flag icon
-                    blocks[row][column].setFlagIcon(false);
-                    //TODO send signal YELLOW Led
-                }
 
-                // block is flagged
-                if (blocks[row][column].isFlagged())
-                {
-                    // disable the block
-                    blocks[row][column].setClickable(false);
-                    //TODO turn off LED
-                }
             }
         }
 
@@ -291,7 +273,6 @@ public class MinesweeperGameLogic {
                 if (blocks[row][column].hasMine())
                 {
                     blocks[row][column].setBlockAsDisabled(false);
-                    blocks[row][column].setFlagIcon(true);
                 }
             }
         }

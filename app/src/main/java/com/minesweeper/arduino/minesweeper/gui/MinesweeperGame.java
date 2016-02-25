@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.minesweeper.arduino.minesweeper.R;
 import com.minesweeper.arduino.minesweeper.entity.Block;
+import com.minesweeper.arduino.minesweeper.logic.ArduinoConnection;
 import com.minesweeper.arduino.minesweeper.logic.MinesweeperGameLogic;
 
 import java.util.Random;
@@ -34,6 +35,12 @@ public class MinesweeperGame extends Activity
     public Block blocks[][]; // blocks for mine field
     public int blockDimension = 20; // width of each block
     public int blockPadding = 2; // padding between blocks
+
+    //LED Colors, arduino code: setColor(red,green,blue)
+    private final int RED = 1; //arduino code: setColor(255,0,0)
+    private final int BLUE = 2; //arduino code: setColor(0,0,255)
+    private final int GREEN = 3; //arduino code: setColor(0,255,0)
+
 
     // Don't touch the default values!
     // LED-WALL 7x14
@@ -201,14 +208,17 @@ public class MinesweeperGame extends Activity
      */
     public void rippleUncover(int rowClicked, int columnClicked)
     {
-        // don't open flagged or mined rows
-        if (blocks[rowClicked][columnClicked].hasMine() || blocks[rowClicked][columnClicked].isFlagged())
+        // don't open  mined rows
+        if (blocks[rowClicked][columnClicked].hasMine())
         {
             return;
         }
 
         // open clicked block
         blocks[rowClicked][columnClicked].OpenBlock();
+        //TODO this sendCommand
+        ArduinoConnection.sendCommand(rowClicked,columnClicked,GREEN);
+
 
         // if clicked block have nearby mines then don't open further
         if (blocks[rowClicked][columnClicked].getNumberOfMinesInSorrounding() != 0 )

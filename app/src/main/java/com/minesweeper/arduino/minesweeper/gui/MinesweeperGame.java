@@ -22,9 +22,9 @@ import java.util.Random;
 
 public class MinesweeperGame extends Activity {
     //LED Colors, arduino code: setColor(red,green,blue)
-    public final int RED = 1; //arduino code: setColor(255,0,0)
-    public final int BLUE = 2; //arduino code: setColor(0,0,255)
-    public final int GREEN = 3; //arduino code: setColor(0,255,0)
+    public static final int RED = 1; //arduino code: setColor(255,0,0)
+    public static final int BLUE = 2; //arduino code: setColor(0,0,255)
+    public static final int GREEN = 3; //arduino code: setColor(0,255,0)
     // Don't touch the default values!
     // LED-WALL 7x14
     public final int numberOfRowsInMineField = 7; //LED-WALL ROWS

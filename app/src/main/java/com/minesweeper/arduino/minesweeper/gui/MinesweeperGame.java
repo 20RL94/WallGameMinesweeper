@@ -22,6 +22,15 @@ import java.util.Random;
 
 public class MinesweeperGame extends Activity
 {
+    //LED Colors, arduino code: setColor(red,green,blue)
+    public final int RED = 1; //arduino code: setColor(255,0,0)
+    public final int BLUE = 2; //arduino code: setColor(0,0,255)
+    public final int GREEN = 3; //arduino code: setColor(0,255,0)
+    // Don't touch the default values!
+    // LED-WALL 7x14
+    public final int numberOfRowsInMineField = 7; //LED-WALL ROWS
+    public final int numberOfColumnsInMineField = 14; // LED-WALL COLUMNSs
+    public final int totalNumberOfMines = 10; //DEFAUL VALUE (RECOMMENDED)
     /*
     * FIELDS are in public, too lazy to do getter and setter.
     * Getter and setter will make this file too long.
@@ -29,24 +38,10 @@ public class MinesweeperGame extends Activity
     public TextView txtMineCount;
     public TextView txtTimer;
     public ImageButton btnSmile;
-
     public TableLayout mineField; // table layout to add mines to
-
     public Block blocks[][]; // blocks for mine field
     public int blockDimension = 20; // width of each block
     public int blockPadding = 2; // padding between blocks
-
-    //LED Colors, arduino code: setColor(red,green,blue)
-    public final int RED = 1; //arduino code: setColor(255,0,0)
-    public final int BLUE = 2; //arduino code: setColor(0,0,255)
-    public final int GREEN = 3; //arduino code: setColor(0,255,0)
-
-
-    // Don't touch the default values!
-    // LED-WALL 7x14
-    public int numberOfRowsInMineField = 7; //LED-WALL ROWS
-    public int numberOfColumnsInMineField = 14; // LED-WALL COLUMNSs
-    public int totalNumberOfMines = 10; //DEFAUL VALUE (RECOMMENDED)
     //Block size
     public int height = 45;
     public int width = 2;
@@ -60,7 +55,27 @@ public class MinesweeperGame extends Activity
     public boolean areMinesSet; // check if mines are planted in blocks
     public boolean isGameOver; // check if game is over
     public int minesToFind; // number of mines yet to be discovered
+    // timer call back when timer is ticked
+    private Runnable updateTimeElasped = new Runnable() {
+        public void run() {
+            long currentMilliseconds = System.currentTimeMillis();
+            ++secondsPassed;
 
+            if (secondsPassed < 10) {
+                txtTimer.setText("00" + Integer.toString(secondsPassed));
+            } else if (secondsPassed < 100) {
+                txtTimer.setText("0" + Integer.toString(secondsPassed));
+            } else {
+                txtTimer.setText(Integer.toString(secondsPassed));
+            }
+
+            // add notification
+            timer.postAtTime(this, currentMilliseconds);
+            // notify to call back after 1 seconds
+            // basically to remain in the timer loop
+            timer.postDelayed(updateTimeElasped, 1000);
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -89,7 +104,6 @@ public class MinesweeperGame extends Activity
         //Short info how to start the game
         showDialog("Press smiley to start New Game", 2000, true, false);
     }
-
 
     /**
      * Call the start method in logic
@@ -132,7 +146,6 @@ public class MinesweeperGame extends Activity
             txtMineCount.setText(Integer.toString(minesToFind));
         }
     }
-
 
     /**
      * set mines excluding the location where user clicked
@@ -244,7 +257,8 @@ public class MinesweeperGame extends Activity
         }
         return;
     }
-//region TIMER
+
+    //region TIMER
     public void startTimer()
     {
         if (secondsPassed == 0)
@@ -260,35 +274,6 @@ public class MinesweeperGame extends Activity
         // disable call backs
         timer.removeCallbacks(updateTimeElasped);
     }
-
-    // timer call back when timer is ticked
-    private Runnable updateTimeElasped = new Runnable()
-    {
-        public void run()
-        {
-            long currentMilliseconds = System.currentTimeMillis();
-            ++secondsPassed;
-
-            if (secondsPassed < 10)
-            {
-                txtTimer.setText("00" + Integer.toString(secondsPassed));
-            }
-            else if (secondsPassed < 100)
-            {
-                txtTimer.setText("0" + Integer.toString(secondsPassed));
-            }
-            else
-            {
-                txtTimer.setText(Integer.toString(secondsPassed));
-            }
-
-            // add notification
-            timer.postAtTime(this, currentMilliseconds);
-            // notify to call back after 1 seconds
-            // basically to remain in the timer loop
-            timer.postDelayed(updateTimeElasped, 1000);
-        }
-    };
     //endregion
 
     public void showDialog(String message, int milliseconds, boolean useSmileImage, boolean useCoolImage)

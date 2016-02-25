@@ -71,9 +71,9 @@ public class MinesweeperGame extends Activity
             @Override
             public void onClick(View view)
             {
-                //endExistingGame(MinesweeperGame.this, btnSmile, mineField, txtMineCount, txtTimer);
                 endGame();
                 startGame();
+                //endExistingGame(MinesweeperGame.this, btnSmile, mineField, txtMineCount, txtTimer);
                 //startNewGame(MinesweeperGame.this);
             }
         });
@@ -128,12 +128,12 @@ public class MinesweeperGame extends Activity
 
 
     /**
+     * set mines excluding the location where user clicked
      * @param currentRow
      * @param currentColumn
      */
     public void setMines(int currentRow, int currentColumn)
     {
-        // set mines excluding the location where user clicked
         Random rand = new Random();
         int mineRow, mineColumn;
 

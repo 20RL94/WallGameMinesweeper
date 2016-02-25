@@ -3,7 +3,6 @@ package com.minesweeper.arduino.minesweeper;
 import android.app.Application;
 import android.test.ApplicationTestCase;
 
-import com.minesweeper.arduino.minesweeper.externLogic.VierGewinnLogic;
 
 /**
  * <a href="http://d.android.com/tools/testing/testing_android.html">Testing Fundamentals</a>

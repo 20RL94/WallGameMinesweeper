@@ -131,6 +131,7 @@ public class MinesweeperGameLogic {
                             if (minesweeperGame.blocks[currentRow][currentColumn].hasMine())
                             {
                                 // Oops, game over
+                                //TODO send a signal to put all LED to RED
                                 finishGame(minesweeperGame, minesweeperGame.blocks, minesweeperGame.btnSmile, minesweeperGame.numberOfColumnsInMineField, minesweeperGame.numberOfRowsInMineField, minesweeperGame.secondsPassed, currentRow, currentColumn);
                             }
 
@@ -143,110 +144,9 @@ public class MinesweeperGameLogic {
                         }
                     }
                 });
-
-                // add Long Click listener
-                // this is treated as right mouse click listener
-                minesweeperGame.blocks[row][column].setOnLongClickListener(new View.OnLongClickListener() {
-                    public boolean onLongClick(View view) {
-
-                        // open all surrounding blocks
-                        if (!minesweeperGame.blocks[currentRow][currentColumn].isCovered() && (minesweeperGame.blocks[currentRow][currentColumn].getNumberOfMinesInSorrounding() > 0) && !isGameOver) {
-                            int nearbyFlaggedBlocks = 0;
-                            for (int previousRow = -1; previousRow < 2; previousRow++) {
-                                for (int previousColumn = -1; previousColumn < 2; previousColumn++) {
-                                    if (minesweeperGame.blocks[currentRow + previousRow][currentColumn + previousColumn].isFlagged()) {
-                                        nearbyFlaggedBlocks++;
-                                    }
-                                }
-                            }
-
-                            // if flagged block count is equal to nearby mine count
-                            // then open nearby blocks
-                            if (nearbyFlaggedBlocks == minesweeperGame.blocks[currentRow][currentColumn].getNumberOfMinesInSorrounding()) {
-                                for (int previousRow = -1; previousRow < 2; previousRow++) {
-                                    for (int previousColumn = -1; previousColumn < 2; previousColumn++) {
-                                        // don't open flagged blocks
-                                        if (!minesweeperGame.blocks[currentRow + previousRow][currentColumn + previousColumn].isFlagged()) {
-                                            // open blocks till we get numbered block
-                                            minesweeperGame.rippleUncover(currentRow + previousRow, currentColumn + previousColumn);
-
-                                            // did we clicked a mine
-                                            if (minesweeperGame.blocks[currentRow + previousRow][currentColumn + previousColumn].hasMine()) {
-                                                // oops game over
-                                                finishGame
-                                                        (minesweeperGame, minesweeperGame.blocks, minesweeperGame.btnSmile, minesweeperGame.numberOfColumnsInMineField, minesweeperGame.numberOfRowsInMineField, minesweeperGame.secondsPassed, currentRow + previousRow, currentColumn + previousColumn);
-                                            }
-
-                                            // did we win the game
-                                            if (checkGameWin
-                                                    (minesweeperGame.blocks, minesweeperGame.numberOfColumnsInMineField, minesweeperGame.numberOfRowsInMineField)) {
-                                                // mark game as win
-                                                winGame(minesweeperGame, minesweeperGame.blocks, minesweeperGame.btnSmile, minesweeperGame.numberOfColumnsInMineField, minesweeperGame.numberOfRowsInMineField, minesweeperGame.secondsPassed);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-
-                            return true;
-                        }
-
-                        // if clicked block is enabled, clickable or flagged
-                        if (minesweeperGame.blocks[currentRow][currentColumn].isClickable() &&
-                                (minesweeperGame.blocks[currentRow][currentColumn].isEnabled() || minesweeperGame.blocks[currentRow][currentColumn].isFlagged())) {
-
-                            //MARKING FUNCTION: it will mark a  selected block will not open it.
-                            // for long clicks set:
-                            // 1. empty blocks to flagged
-                            // 2. flagged to question mark
-                            // 3. question mark to blank
-
-                            // case 1. set blank block to flagged
-                            if (!minesweeperGame.blocks[currentRow][currentColumn].isFlagged() && !minesweeperGame.blocks[currentRow][currentColumn].isQuestionMarked()) {
-                                minesweeperGame.blocks[currentRow][currentColumn].setBlockAsDisabled(false);
-                                minesweeperGame.blocks[currentRow][currentColumn].setFlagIcon(true);
-                                minesweeperGame.blocks[currentRow][currentColumn].setFlagged(true);
-                                minesweeperGame.minesToFind--; //reduce mine count
-                                minesweeperGame.updateMineCountDisplay();
-                                //TODO send a signal to put the selected LED in BLUE
-                            }
-                            // case 2. set flagged to question mark
-                            else if (!minesweeperGame.blocks[currentRow][currentColumn].isQuestionMarked()) {
-                                minesweeperGame.blocks[currentRow][currentColumn].setBlockAsDisabled(true);
-                                minesweeperGame.blocks[currentRow][currentColumn].setQuestionMarkIcon(true);
-                                minesweeperGame.blocks[currentRow][currentColumn].setFlagged(false);
-                                minesweeperGame.blocks[currentRow][currentColumn].setQuestionMarked(true);
-                                minesweeperGame.minesToFind++; // increase mine count
-                                minesweeperGame.updateMineCountDisplay();
-                                //TODO send a signal to put the selected LED in YELLOW
-                            }
-                            // case 3. change to blank square
-                            else {
-                                minesweeperGame.blocks[currentRow][currentColumn].setBlockAsDisabled(true);
-                                minesweeperGame.blocks[currentRow][currentColumn].clearAllIcons();
-                                minesweeperGame.blocks[currentRow][currentColumn].setQuestionMarked(false);
-                                // if it is flagged then increment mine count
-                                if (minesweeperGame.blocks[currentRow][currentColumn].isFlagged()) {
-                                    minesweeperGame.minesToFind++; // increase mine count
-                                    minesweeperGame.updateMineCountDisplay();
-                                }
-                                // remove flagged status
-                                minesweeperGame.blocks[currentRow][currentColumn].setFlagged(false);
-                                //TODO send a signal to put selected LED back to GREEN
-                            }
-
-                            minesweeperGame.updateMineCountDisplay(); // update mine display
-                        }
-
-                        return true;
-                    }
-                });
             }
         }
     }
-
-
 
     /**
      * Method to end game and reset the values.

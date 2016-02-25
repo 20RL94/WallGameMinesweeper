@@ -20,8 +20,7 @@ import com.minesweeper.arduino.minesweeper.logic.MinesweeperGameLogic;
 
 import java.util.Random;
 
-public class MinesweeperGame extends Activity
-{
+public class MinesweeperGame extends Activity {
     //LED Colors, arduino code: setColor(red,green,blue)
     public final int RED = 1; //arduino code: setColor(255,0,0)
     public final int BLUE = 2; //arduino code: setColor(0,0,255)
@@ -78,8 +77,7 @@ public class MinesweeperGame extends Activity
     };
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
@@ -88,19 +86,15 @@ public class MinesweeperGame extends Activity
         txtTimer = (TextView) findViewById(R.id.Timer);
         btnSmile = (ImageButton) findViewById(R.id.Smiley);
         // Set an event when a button is press
-        btnSmile.setOnClickListener(new OnClickListener()
-        {
+        btnSmile.setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 endGame();
                 startGame();
-                //endExistingGame(MinesweeperGame.this, btnSmile, mineField, txtMineCount, txtTimer);
-                //startNewGame(MinesweeperGame.this);
             }
         });
         //This is the table on the android device where the Blocks will be put
-        mineField = (TableLayout)findViewById(R.id.MineField);
+        mineField = (TableLayout) findViewById(R.id.MineField);
         //Short info how to start the game
         showDialog("Press smiley to start New Game", 2000, true, false);
     }
@@ -108,8 +102,7 @@ public class MinesweeperGame extends Activity
     /**
      * Call the start method in logic
      */
-    private void startGame()
-    {
+    private void startGame() {
         MinesweeperGameLogic.startNewGame(MinesweeperGame.this);
     }
 
@@ -119,60 +112,47 @@ public class MinesweeperGame extends Activity
      * Reset the values on fields
      * send signal to reset LED-WALL
      */
-    private void endGame()
-    {
+    private void endGame() {
         MinesweeperGameLogic.endExistingGame(MinesweeperGame.this, btnSmile, mineField, txtMineCount, txtTimer);
     }
 
     /**
-     *Show the remaining mines (not used in project)
+     * Show the remaining mines (not used in project)
      */
-    public void updateMineCountDisplay()
-    {
-        if (minesToFind < 0)
-        {
+    public void updateMineCountDisplay() {
+        if (minesToFind < 0) {
             txtMineCount.setText(Integer.toString(minesToFind));
-        }
-        else if (minesToFind < 10)
-        {
+        } else if (minesToFind < 10) {
             txtMineCount.setText("00" + Integer.toString(minesToFind));
-        }
-        else if (minesToFind < 100)
-        {
+        } else if (minesToFind < 100) {
             txtMineCount.setText("0" + Integer.toString(minesToFind));
-        }
-        else
-        {
+        } else {
             txtMineCount.setText(Integer.toString(minesToFind));
         }
     }
 
     /**
      * set mines excluding the location where user clicked
+     *
      * @param currentRow
      * @param currentColumn
      */
-    public void setMines(int currentRow, int currentColumn)
-    {
+    public void setMines(int currentRow, int currentColumn) {
         Random rand = new Random();
         int mineRow, mineColumn;
 
-        for (int row = 0; row < totalNumberOfMines; row++)
-        {
+        for (int row = 0; row < totalNumberOfMines; row++) {
             mineRow = rand.nextInt(numberOfColumnsInMineField);
             mineColumn = rand.nextInt(numberOfRowsInMineField);
-            if ((mineRow + 1 != currentColumn) || (mineColumn + 1 != currentRow))
-            {
-                if (blocks[mineColumn + 1][mineRow + 1].hasMine())
-                {
+            if ((mineRow + 1 != currentColumn) || (mineColumn + 1 != currentRow)) {
+                if (blocks[mineColumn + 1][mineRow + 1].hasMine()) {
                     row--; // mine is already there, don't repeat for same block
                 }
                 // plant mine at this location
                 blocks[mineColumn + 1][mineRow + 1].plantMine();
             }
             // exclude the user clicked location
-            else
-            {
+            else {
                 row--;
             }
         }
@@ -180,21 +160,15 @@ public class MinesweeperGame extends Activity
         int nearByMineCount;
 
         // count number of mines in surrounding blocks
-        for (int row = 0; row < numberOfRowsInMineField + 2; row++)
-        {
-            for (int column = 0; column < numberOfColumnsInMineField + 2; column++)
-            {
+        for (int row = 0; row < numberOfRowsInMineField + 2; row++) {
+            for (int column = 0; column < numberOfColumnsInMineField + 2; column++) {
                 // for each block find nearby mine count
                 nearByMineCount = 0;
-                if ((row != 0) && (row != (numberOfRowsInMineField + 1)) && (column != 0) && (column != (numberOfColumnsInMineField + 1)))
-                {
+                if ((row != 0) && (row != (numberOfRowsInMineField + 1)) && (column != 0) && (column != (numberOfColumnsInMineField + 1))) {
                     // check in all nearby blocks
-                    for (int previousRow = -1; previousRow < 2; previousRow++)
-                    {
-                        for (int previousColumn = -1; previousColumn < 2; previousColumn++)
-                        {
-                            if (blocks[row + previousRow][column + previousColumn].hasMine())
-                            {
+                    for (int previousRow = -1; previousRow < 2; previousRow++) {
+                        for (int previousColumn = -1; previousColumn < 2; previousColumn++) {
+                            if (blocks[row + previousRow][column + previousColumn].hasMine()) {
                                 // a mine was found so increment the counter
                                 nearByMineCount++;
                             }
@@ -205,8 +179,7 @@ public class MinesweeperGame extends Activity
                 }
                 // for side rows (0th and last row/column)
                 // set count as 9 and mark it as opened
-                else
-                {
+                else {
                     blocks[row][column].setNumberOfMinesInSurrounding(9);
                     blocks[row][column].OpenBlock();
                 }
@@ -216,41 +189,36 @@ public class MinesweeperGame extends Activity
 
     /**
      * Show empty block near the clicked block
+     *
      * @param rowClicked
      * @param columnClicked
      */
-    public void rippleUncover(int rowClicked, int columnClicked)
-    {
+    public void rippleUncover(int rowClicked, int columnClicked) {
         // don't open  mined rows
-        if (blocks[rowClicked][columnClicked].hasMine())
-        {
+        if (blocks[rowClicked][columnClicked].hasMine()) {
             return;
         }
 
         // open clicked block
         blocks[rowClicked][columnClicked].OpenBlock();
         //TODO this sendCommand
-        ArduinoConnection.sendCommand(rowClicked,columnClicked,GREEN);
+        ArduinoConnection.sendCommand(rowClicked, columnClicked, GREEN);
 
 
         // if clicked block have nearby mines then don't open further
-        if (blocks[rowClicked][columnClicked].getNumberOfMinesInSorrounding() != 0 )
-        {
+        if (blocks[rowClicked][columnClicked].getNumberOfMinesInSorrounding() != 0) {
             return;
         }
 
         // open next 3 rows and 3 columns recursively
-        for (int row = 0; row < 3; row++)
-        {
-            for (int column = 0; column < 3; column++)
-            {
+        for (int row = 0; row < 3; row++) {
+            for (int column = 0; column < 3; column++) {
                 // check all the above checked conditions
                 // if met then open subsequent blocks
                 if (blocks[rowClicked + row - 1][columnClicked + column - 1].isCovered()
                         && (rowClicked + row - 1 > 0) && (columnClicked + column - 1 > 0)
-                        && (rowClicked + row - 1 < numberOfRowsInMineField + 1) && (columnClicked + column - 1 < numberOfColumnsInMineField + 1))
-                {
-                    rippleUncover(rowClicked + row - 1, columnClicked + column - 1 );
+                        && (rowClicked + row - 1 < numberOfRowsInMineField + 1) && (columnClicked + column - 1 < numberOfColumnsInMineField + 1)) {
+                    rippleUncover(rowClicked + row - 1, columnClicked + column - 1);
                     //TODO Turn off selected block on LED-WALL
                 }
             }
@@ -259,25 +227,21 @@ public class MinesweeperGame extends Activity
     }
 
     //region TIMER
-    public void startTimer()
-    {
-        if (secondsPassed == 0)
-        {
+    public void startTimer() {
+        if (secondsPassed == 0) {
             timer.removeCallbacks(updateTimeElasped);
             // tell timer to run call back after 1 second
             timer.postDelayed(updateTimeElasped, 1000);
         }
     }
 
-    public void stopTimer()
-    {
+    public void stopTimer() {
         // disable call backs
         timer.removeCallbacks(updateTimeElasped);
     }
     //endregion
 
-    public void showDialog(String message, int milliseconds, boolean useSmileImage, boolean useCoolImage)
-    {
+    public void showDialog(String message, int milliseconds, boolean useSmileImage, boolean useCoolImage) {
         // show message
         Toast dialog = Toast.makeText(
                 getApplicationContext(),
@@ -287,16 +251,11 @@ public class MinesweeperGame extends Activity
         dialog.setGravity(Gravity.CENTER, 0, 0);
         LinearLayout dialogView = (LinearLayout) dialog.getView();
         ImageView coolImage = new ImageView(getApplicationContext());
-        if (useSmileImage)
-        {
+        if (useSmileImage) {
             coolImage.setImageResource(R.drawable.smile);
-        }
-        else if (useCoolImage)
-        {
+        } else if (useCoolImage) {
             coolImage.setImageResource(R.drawable.cool);
-        }
-        else
-        {
+        } else {
             coolImage.setImageResource(R.drawable.sad);
         }
         dialogView.addView(coolImage, 0);

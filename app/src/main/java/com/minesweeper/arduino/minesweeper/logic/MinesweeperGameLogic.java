@@ -15,13 +15,14 @@ import com.minesweeper.arduino.minesweeper.gui.MinesweeperGame;
  */
 public class MinesweeperGameLogic {
 
+    private static String setTextDefaultValue = "000";
 
     /**
      * Method to start the game
      * Generate the field --> set the Mines
      * Show the field on the device
      * The Default total value of mine is 10 , because the LED-WALL is small.
-     * @param minesweeperGame
+     * @param minesweeperGame reference to the class object
      */
     public static void startNewGame(MinesweeperGame minesweeperGame)
     {
@@ -38,15 +39,15 @@ public class MinesweeperGameLogic {
     }
     /**
      * Method to show the field on the device
-     * @param minesweeperGame
-     * @param blockDimension
-     * @param blockPadding
-     * @param blocks
-     * @param height
-     * @param mineField
-     * @param numberOfColumnsInMineField
-     * @param numberOfRowsInMineField
-     * @param width
+     * @param minesweeperGame the reference to class object
+     * @param blockDimension block dimension
+     * @param blockPadding block pad
+     * @param blocks the reference to class object
+     * @param height block height
+     * @param mineField reference to the table layout
+     * @param numberOfColumnsInMineField amount of cols in table layout
+     * @param numberOfRowsInMineField amount of rows in table layout
+     * @param width block width
      */
     public static void showMineField(MinesweeperGame minesweeperGame, int blockDimension, int blockPadding, Block[][] blocks, int height, TableLayout mineField, int numberOfColumnsInMineField, int numberOfRowsInMineField, int width)
     {
@@ -74,10 +75,10 @@ public class MinesweeperGameLogic {
      * Method to  initialize the Minefield
      * set the listener in each block
      * set the mines on each block on first click
-     * @param minesweeperGame
-     * @param isGameOver
-     * @param numberOfColumnsInMineField
-     * @param numberOfRowsInMineField
+     * @param minesweeperGame reference to class object
+     * @param isGameOver boolean to know if the game is over
+     * @param numberOfColumnsInMineField´amount of cols in table layout
+     * @param numberOfRowsInMineField amount of rows in table layout
      */
     public static void createMineField(final MinesweeperGame minesweeperGame, final boolean isGameOver, int numberOfColumnsInMineField, int numberOfRowsInMineField)
     {
@@ -145,17 +146,17 @@ public class MinesweeperGameLogic {
 
     /**
      * Method to end game and reset the values.
-     * @param minesweeperGame
-     * @param btnSmile
-     * @param mineField
-     * @param txtMineCount
-     * @param txtTimer
+     * @param minesweeperGame reference to the class object
+     * @param btnSmile reference to button
+     * @param mineField reference to the table layout
+     * @param txtMineCount reference to the textview
+     * @param txtTimer reference to the textview
      */
     public static void endExistingGame(MinesweeperGame minesweeperGame, ImageButton btnSmile, TableLayout mineField, TextView txtMineCount, TextView txtTimer)
     {
         minesweeperGame.stopTimer(); // stop if timer is running
-        txtTimer.setText("000"); // revert all text
-        txtMineCount.setText("000"); // revert mines count
+        txtTimer.setText(setTextDefaultValue); // revert all text
+        txtMineCount.setText(setTextDefaultValue); // revert mines count
         btnSmile.setBackgroundResource(R.drawable.smile);
 
         // remove all rows from mineField TableLayout
@@ -172,10 +173,10 @@ public class MinesweeperGameLogic {
 
     /**
      * Method to check if the game is over -> WIN
-     * @param blocks
-     * @param numberOfColumnsInMineField
-     * @param numberOfRowsInMineField
-     * @return
+     * @param blocks reference to class object
+     * @param numberOfColumnsInMineField amount of cols in table layout
+     * @param numberOfRowsInMineField amount of rows in table layout
+     * @return true win, false not over yet
      */
     public static boolean checkGameWin(Block[][] blocks, int numberOfColumnsInMineField, int numberOfRowsInMineField)
     {
@@ -195,14 +196,14 @@ public class MinesweeperGameLogic {
     /**
      * Method to end the current game and reset certain variables to default value
      * Show all mines and disable touch function
-     * @param minesweeperGame
-     * @param blocks
-     * @param btnSmile
-     * @param numberOfColumnsInMineField
-     * @param numberOfRowsInMineField
-     * @param secondsPassed
-     * @param currentRow
-     * @param currentColumn
+     * @param minesweeperGame reference to the class object
+     * @param blocks reference to the class object
+     * @param btnSmile reference to ImageButton
+     * @param numberOfColumnsInMineField amount of cols in tablelayout
+     * @param numberOfRowsInMineField amount of rows in tablelayout
+     * @param secondsPassed time used
+     * @param currentRow current x-pos
+     * @param currentColumn current y-pos
      */
     public static void finishGame(MinesweeperGame minesweeperGame, Block[][] blocks, ImageButton btnSmile, int numberOfColumnsInMineField, int numberOfRowsInMineField, int secondsPassed, int currentRow, int currentColumn)
     {
@@ -245,12 +246,12 @@ public class MinesweeperGameLogic {
     /**
      * Method the same like finish game.
      * Just with
-     * @param minesweeperGame
-     * @param blocks
-     * @param btnSmile
-     * @param numberOfColumnsInMineField
-     * @param numberOfRowsInMineField
-     * @param secondsPassed
+     * @param minesweeperGame reference to the class object
+     * @param blocks reference to the class object
+     * @param btnSmile reference to the imagebutton
+     * @param numberOfColumnsInMineField amount of cols in tablelayout
+     * @param numberOfRowsInMineField amount of rows in tablelayout
+     * @param secondsPassed time used
      */
     public static void winGame(MinesweeperGame minesweeperGame, Block[][] blocks, ImageButton btnSmile, int numberOfColumnsInMineField, int numberOfRowsInMineField, int secondsPassed)
     {

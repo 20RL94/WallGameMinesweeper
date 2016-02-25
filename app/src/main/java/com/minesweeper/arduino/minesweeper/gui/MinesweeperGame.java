@@ -134,8 +134,8 @@ public class MinesweeperGame extends Activity {
     /**
      * set mines excluding the location where user clicked
      *
-     * @param currentRow
-     * @param currentColumn
+     * @param currentRow current x-pos
+     * @param currentColumn current y-pos
      */
     public void setMines(int currentRow, int currentColumn) {
         Random rand = new Random();
@@ -190,8 +190,8 @@ public class MinesweeperGame extends Activity {
     /**
      * Show empty block near the clicked block
      *
-     * @param rowClicked
-     * @param columnClicked
+     * @param rowClicked x-pos that is clicked
+     * @param columnClicked y-pos that is clicked
      */
     public void rippleUncover(int rowClicked, int columnClicked) {
         // don't open  mined rows
@@ -223,7 +223,7 @@ public class MinesweeperGame extends Activity {
                 }
             }
         }
-        return;
+        //return;
     }
 
     //region TIMER

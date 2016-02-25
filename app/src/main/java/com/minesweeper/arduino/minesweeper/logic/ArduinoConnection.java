@@ -28,11 +28,13 @@ public  class ArduinoConnection {
 
     /**
      * convert the x, y to one jsonObject
-     * @param row
-     * @param col
+     * @param row x-pos
+     * @param col y-pos
+     * @param LEDCOLOR color of LED
      */
     private static   JSONObject convertPositionToJSONObject(int row, int col, int LEDCOLOR) throws JSONException
     {
+        // arduino needs the 3 color (r,g,b) to change the color of a LED
         JSONObject obj = new JSONObject();
         if (LEDCOLOR==1)//red
         {

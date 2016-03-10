@@ -262,4 +262,6 @@ public class MinesweeperGame extends Activity {
         dialog.setDuration(milliseconds);
         dialog.show();
     }
+
+
 }
